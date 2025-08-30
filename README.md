@@ -1,50 +1,42 @@
-# Welcome to your Expo app 👋
+# MeetingNotes – Mötesinspelning med AI-transkribering och sammanfattning
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+En Expo/React Native-app som:
+- listar kommande möten från din kalender,
+- spelar in ljud under mötet,
+- skickar ljudet till AI för transkribering,
+- och genererar mötesanteckningar och sammanfattning.
 
-## Get started
+## Krav och valda tjänster
+- Kalender: expo-calendar
+- Inspelning: expo-audio
+- Lagring: expo-file-system
+- AI:
+  - Transkribering: OpenAI Whisper (v1/audio/transcriptions)
+  - Sammanfattning: OpenAI GPT-4o-mini (chat/completions)
 
-1. Install dependencies
+Du kan byta leverantör i `lib/aiService.ts` om du föredrar t.ex. AssemblyAI.
 
+## Kom igång
+1. Installera beroenden
    ```bash
    npm install
    ```
-
-2. Start the app
-
+2. Konfigurera API-nyckel
+   - Öppna `app.json` och sätt `expo.extra.OPENAI_API_KEY` till din nyckel.
+3. Starta appen
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+## Behörigheter
+Appen begär tillgång till kalendern (för att läsa möten) och mikrofon (för inspelning). iOS kräver InfoPlist-nycklar; Android kräver motsvarande tillstånd. Dessa är redan tillagda i `app.json`.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Flöde i appen
+- Start (/) -> "Gå till möten"
+- Möten (/meetings): listar kommande event och visar pågående möte om något pågår. Tryck "Spela in".
+- Inspelning (/record): starta/stoppa inspelning. När du stoppar skickas filen till AI.
+- Anteckningar (/notes): visar transkript, sammanfattning och åtgärdspunkter.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Felsökning
+- Om transkribering/sammanfattning misslyckas: kontrollera att `OPENAI_API_KEY` är korrekt.
+- På simulatorer kan kalenderåtkomst/inspelning vara begränsad; testa helst på fysisk enhet.
