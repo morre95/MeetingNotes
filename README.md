@@ -11,19 +11,24 @@ En Expo/React Native-app som:
 - Kalender: expo-calendar
 - Inspelning: expo-audio
 - Lagring: expo-file-system
+- E-post: expo-mail-composer
 - AI:
-  - Transkribering: OpenAI Whisper (v1/audio/transcriptions)
-  - Sammanfattning: OpenAI GPT-4o-mini (chat/completions)
+  - Transkribering: OpenAI gpt-4o-mini-transcribe (audio/transcriptions)
+  - Sammanfattning: OpenAI gpt-4o-mini (chat/completions)
 
 Du kan byta leverantör i `lib/aiService.ts` om du föredrar t.ex. AssemblyAI.
 
 ## Kom igång
-1. Installera beroenden
+1. Klona branch och installera beroenden
    ```bash
+   git clone https://github.com/morre95/MeetingNotes.git
+   ```
+    ```bash
    npm install
    ```
 2. Konfigurera API-nyckel
-   - Öppna `app.json` och sätt `expo.extra.OPENAI_API_KEY` till din nyckel.
+   - Sätt OpenAI nyckeln till `EXPO_PUBLIC_OPENAI_API_KEY` i expo EAS portalen.
+   - Om du vil köra appen lokalt kör `eas env:pull --environment development` i konsolen
 3. Starta appen
    ```bash
    npx expo start
@@ -37,7 +42,8 @@ Appen begär tillgång till kalendern (för att läsa möten) och mikrofon (för
 - Möten (/meetings): listar kommande event och visar pågående möte om något pågår. Tryck "Spela in".
 - Inspelning (/record): starta/stoppa inspelning. När du stoppar skickas filen till AI.
 - Anteckningar (/notes): visar transkript, sammanfattning och åtgärdspunkter.
+- Inspelade Möten (/records): visar inspelade möten.
 
 ## Felsökning
-- Om transkribering/sammanfattning misslyckas: kontrollera att `OPENAI_API_KEY` är korrekt.
+- Om transkribering/sammanfattning misslyckas: kontrollera att `EXPO_PUBLIC_OPENAI_API_KEY` är korrekt.
 - På simulatorer kan kalenderåtkomst/inspelning vara begränsad; testa helst på fysisk enhet.
