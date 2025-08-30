@@ -15,5 +15,6 @@ export default function RootLayout() {
         <Stack.Screen name="meetings" options={{}} />
         <Stack.Screen name="record" options={{}} />
         <Stack.Screen name="notes" options={{}} />
+        <Stack.Screen name="recordings" options={{ title: 'Inspelningar' }} />
     </Stack>;
 }

@@ -11,6 +11,8 @@ export default function Index() {
             <Link href={"./meetings"} style={{color: '#1e90ff', fontSize: 18}}>Gå till möten</Link>
             <View style={{height: 35}}/>
             <Link href={'./record'} style={{color: '#1e90ff', fontSize: 18}}>Spela in ett möte</Link>
+            <View style={{height: 16}}/>
+            <Link href={'./recordings'} style={{color: '#1e90ff', fontSize: 18}}>Visa inspelningar</Link>
         </SafeAreaView>
     );
 }

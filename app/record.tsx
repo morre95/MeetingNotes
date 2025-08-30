@@ -10,7 +10,6 @@ import {
 } from 'expo-audio';
 import * as FileSystem from 'expo-file-system';
 import { transcribeAndSummarize } from '@/lib/aiService';
-import {RecordingItem} from "@/types/common";
 
 export default function RecordScreen() {
     const params = useLocalSearchParams<{ eventId: string; title: string }>();
@@ -59,18 +58,25 @@ export default function RecordScreen() {
                 console.log('Writing to', outPath);
                 await FileSystem.writeAsStringAsync(outPath, JSON.stringify(result, null, 2));
 
-                if (params.eventId !== "") {
-                    const item : RecordingItem = {
-                        id: params.eventId,
-                        title: currentTitle,
-                    };
-
-                    const itemPath = `${FileSystem.bundleDirectory}/assets/data/recordings.json`;
-                    const data = JSON.parse(await FileSystem.readAsStringAsync(itemPath));
-                    if (!data && data.items.length <= 0) data.items = [];
-                    data.items.push(item);
-                    await FileSystem.writeAsStringAsync(itemPath, JSON.stringify(data, null, 2));
-                }
+                // Update recordings index
+                const indexFile = (FileSystem.documentDirectory || '') + 'recordings-index.json';
+                let indexContent: { items: any[]; folders: any[] } = { items: [], folders: [] };
+                try {
+                    const info = await FileSystem.getInfoAsync(indexFile);
+                    if (info.exists) {
+                        const txt = await FileSystem.readAsStringAsync(indexFile);
+                        indexContent = JSON.parse(txt);
+                    }
+                } catch {}
+                const newItem = {
+                    id: String(Date.now()),
+                    title: currentTitle,
+                    createdAt: new Date().toISOString(),
+                    audioPath: fileUri,
+                    dataPath: outPath,
+                };
+                const newPayload = JSON.stringify({ items: [...(indexContent.items || []), newItem], folders: indexContent.folders || [] }, null, 2);
+                await FileSystem.writeAsStringAsync(indexFile, newPayload);
 
                 setStatus('Klart!');
                 router.push({ pathname: './notes', params: { dataPath: outPath } });
