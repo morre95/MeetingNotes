@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, SafeAreaView, Text, View, Alert } from 'react-native';
+import {Button, SafeAreaView, Text, View, Alert, TextInput, Pressable} from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import {
     useAudioRecorder,
@@ -17,6 +17,8 @@ export default function RecordScreen() {
     const recorderState = useAudioRecorderState(audioRecorder);
     const [uri, setUri] = useState<string | null>(null);
     const [status, setStatus] = useState('Redo att spela in');
+    const [isEditingTitle, setIsEditingTitle] = useState(false);
+    const [currentTitle, setCurrentTitle] = useState(params.title || 'Möte');
     const router = useRouter();
 
     useEffect(() => {
@@ -50,7 +52,7 @@ export default function RecordScreen() {
             setStatus('Transkriberar och sammanfattar...');
             try {
                 const audioBase64 = await FileSystem.readAsStringAsync(fileUri, { encoding: FileSystem.EncodingType.Base64 });
-                const result = await transcribeAndSummarize({ base64: audioBase64, filename: 'meeting.m4a', title: params.title || 'Möte' });
+                const result = await transcribeAndSummarize({ base64: audioBase64, filename: 'meeting.m4a', title: currentTitle });
                 // Persist simple JSON locally next to the audio
                 const outPath = fileUri.replace(/\.[^/.]+$/, '') + '.json';
                 await FileSystem.writeAsStringAsync(outPath, JSON.stringify(result, null, 2));
@@ -64,7 +66,20 @@ export default function RecordScreen() {
 
     return (
         <SafeAreaView style={{ flex: 1, padding: 16 }}>
-            <Text style={{ fontSize: 18, fontWeight: '600' }}>{params.title || 'Möte'}</Text>
+
+            <Pressable onPress={() => setIsEditingTitle(true)}>
+                {isEditingTitle ? (
+                    <TextInput
+                        style={{fontSize: 18, fontWeight: '600', borderBottomWidth: 1, borderColor: '#ccc', padding: 4}}
+                        value={currentTitle}
+                        onChangeText={setCurrentTitle}
+                        onBlur={() => setIsEditingTitle(false)}
+                        autoFocus
+                    />
+                ) : (
+                    <Text style={{fontSize: 18, fontWeight: '600'}}>{currentTitle}</Text>
+                )}
+            </Pressable>
             <Text style={{ marginTop: 8 }}>{status}</Text>
             <View style={{ height: 16 }} />
             {!recorderState.isRecording ? (
