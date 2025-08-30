@@ -10,6 +10,7 @@ import {
 } from 'expo-audio';
 import * as FileSystem from 'expo-file-system';
 import { transcribeAndSummarize } from '@/lib/aiService';
+import {RecordingItem} from "@/types/common";
 
 export default function RecordScreen() {
     const params = useLocalSearchParams<{ eventId: string; title: string }>();
@@ -55,7 +56,22 @@ export default function RecordScreen() {
                 const result = await transcribeAndSummarize({ base64: audioBase64, filename: 'meeting.m4a', title: currentTitle });
                 // Persist simple JSON locally next to the audio
                 const outPath = fileUri.replace(/\.[^/.]+$/, '') + '.json';
+                console.log('Writing to', outPath);
                 await FileSystem.writeAsStringAsync(outPath, JSON.stringify(result, null, 2));
+
+                if (params.eventId !== "") {
+                    const item : RecordingItem = {
+                        id: params.eventId,
+                        title: currentTitle,
+                    };
+
+                    const itemPath = `${FileSystem.bundleDirectory}/assets/data/recordings.json`;
+                    const data = JSON.parse(await FileSystem.readAsStringAsync(itemPath));
+                    if (!data && data.items.length <= 0) data.items = [];
+                    data.items.push(item);
+                    await FileSystem.writeAsStringAsync(itemPath, JSON.stringify(data, null, 2));
+                }
+
                 setStatus('Klart!');
                 router.push({ pathname: './notes', params: { dataPath: outPath } });
             } catch (e: any) {
