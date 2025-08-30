@@ -66,7 +66,10 @@
     },
     "extra": {
       "OPENAI_API_KEY": "",
-      "router": {}
+      "router": {},
+      "eas": {
+        "projectId": "e80ecfd3-5835-4018-96d1-05a42745b27b"
+      }
     }
   }
 }
