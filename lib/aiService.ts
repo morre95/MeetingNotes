@@ -18,7 +18,7 @@ interface InputAudio {
 // You can swap to AssemblyAI or Google STT by editing this single file.
 
 export async function transcribeAndSummarize(input: InputAudio): Promise<TranscriptionResult> {
-  const openaiKey = Constants.expoConfig?.extra?.OPENAI_API_KEY || (Constants as any).manifest?.extra?.OPENAI_API_KEY;
+  const openaiKey = Constants.expoConfig?.extra?.OPENAI_API_KEY || Constants.default.expoConfig?.extra?.OPENAI_API_KEY;
   if (!openaiKey) {
     throw new Error('OPENAI_API_KEY saknas i app.json -> expo.extra');
   }

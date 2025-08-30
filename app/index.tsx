@@ -8,7 +8,9 @@ export default function Index() {
             <Text style={{marginTop: 8, textAlign: 'center'}}>Spela in möten från din kalender och få transkript och
                 sammanfattningar med AI.</Text>
             <View style={{height: 16}}/>
-            <Link href="./meetings" style={{color: '#1e90ff', fontSize: 18}}>Gå till möten</Link>
+            <Link href={"./meetings"} style={{color: '#1e90ff', fontSize: 18}}>Gå till möten</Link>
+            <View style={{height: 35}}/>
+            <Link href={'./record'} style={{color: '#1e90ff', fontSize: 18}}>Spela in ett möte</Link>
         </SafeAreaView>
     );
 }
