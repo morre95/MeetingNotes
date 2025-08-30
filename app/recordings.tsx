@@ -61,7 +61,7 @@ export default function RecordingsScreen() {
         await saveIndex([], []);
       }
     } catch (e) {
-      // ignore parsing errors
+      console.error('Error loading index', e);
     } finally {
       setLoading(false);
     }
