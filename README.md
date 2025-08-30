@@ -2,6 +2,7 @@
 
 En Expo/React Native-app som:
 - listar kommande möten från din kalender,
+- kan spela in möten utan kalenderhändelse (ad-hoc),
 - spelar in ljud under mötet,
 - skickar ljudet till AI för transkribering,
 - och genererar mötesanteckningar och sammanfattning.

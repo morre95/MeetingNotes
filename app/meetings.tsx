@@ -82,6 +82,10 @@ export default function MeetingsScreen() {
         ) : (
           <Text style={{ marginTop: 8 }}>Inget pågående möte just nu.</Text>
         )}
+        <View style={{ marginTop: 12 }}>
+          <Text style={{ fontWeight: '500', marginBottom: 6 }}>Ingen kalenderhändelse?</Text>
+          <Button title="Spela in utan kalender" onPress={() => router.push({ pathname: './record', params: { title: 'Ad-hoc-möte' } })} />
+        </View>
       </View>
       <FlatList
         data={events}
