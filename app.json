@@ -20,8 +20,17 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["READ_CALENDAR", "WRITE_CALENDAR", "RECORD_AUDIO"],
-      "edgeToEdgeEnabled": true
+      "permissions": [
+        "READ_CALENDAR",
+        "WRITE_CALENDAR",
+        "RECORD_AUDIO",
+        "android.permission.READ_CALENDAR",
+        "android.permission.WRITE_CALENDAR",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ],
+      "edgeToEdgeEnabled": true,
+      "package": "com.cryptomorre.MeetingNotes"
     },
     "web": {
       "bundler": "metro",
@@ -56,7 +65,11 @@
       "typedRoutes": true
     },
     "extra": {
-      "OPENAI_API_KEY": ""
+      "OPENAI_API_KEY": "",
+      "router": {},
+      "eas": {
+        "projectId": "c2692acf-4ed9-4c84-b58c-0c1249956b97"
+      }
     }
   }
 }

@@ -26,7 +26,7 @@ export default function RecordScreen() {
                 Alert.alert('Permission to access microphone was denied');
             }
 
-            setAudioModeAsync({
+            await setAudioModeAsync({
                 playsInSilentMode: true,
                 allowsRecording: true,
             });
