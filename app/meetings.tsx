@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Button, FlatList, Platform, SafeAreaView, Text, View } from 'react-native';
 import * as Calendar from 'expo-calendar';
-import * as Device from 'expo-device';
+//import * as Device from 'expo-device';
 import { useRouter } from 'expo-router';
 
 interface MeetingEvent {
@@ -53,13 +53,13 @@ export default function MeetingsScreen() {
         return events.find(e => now >= e.startDate && now <= e.endDate);
     }, [events, now]);
 
-    if (!Device.isDevice) {
+    /*if (!Device.isDevice) {
         return (
             <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Text>Calendar access requires a real device.</Text>
             </SafeAreaView>
         );
-    }
+    }*/
 
     if (!permission || permission.status !== 'granted') {
         return (

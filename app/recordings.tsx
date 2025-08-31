@@ -89,12 +89,37 @@ export default function RecordingsScreen() {
         await saveIndex(copy, folders);
     };
 
+    const [isEditingTitle, setIsEditingTitle] = useState(false);
+    const [currentTitle, setCurrentTitle] = useState('');
+    const [currentTitleId, setCurrentTitleId] = useState('');
+
+    const changeTitle = async (recId: string) => {
+        const idx = items.findIndex(it => it.id === recId);
+        if (idx === -1) return;
+        const title = items[idx].title
+        setCurrentTitle(title);
+        setIsEditingTitle(true);
+        setCurrentTitleId(recId)
+    }
+
+    const saveTitle = async (recId: string, newTitle: string) => {
+        const idx = items.findIndex(it => it.id === recId);
+        if (idx === -1) return;
+        const copy = items.slice();
+        copy[idx] = { ...copy[idx], title: newTitle };
+        await saveIndex(copy, folders);
+    }
+
     const renderFolderBlock = (folderName: string, data: RecordingMeta[]) => (
         <View key={folderName} style={{ padding: 16 }}>
             <Text style={{ fontSize: 18, fontWeight: '600' }}>{folderName}</Text>
             {data.map(item => (
                 <View key={item.id} style={{ paddingVertical: 12, borderBottomWidth: 1, borderColor: '#eee' }}>
-                    <Text style={{ fontWeight: '500' }}>{item.title}</Text>
+                    <View style={{flexDirection: 'row'}}>
+                        <Pressable onPress={() => changeTitle(item.id)}>
+                            <Text style={{ fontWeight: '500' }}>{item.title}</Text>
+                        </Pressable>
+                    </View>
                     <Text style={{ color: '#666', marginTop: 4 }}>{new Date(item.createdAt).toLocaleString()}</Text>
                     <View style={{ flexDirection: 'row', gap: 8, marginTop: 8 }}>
                         <Button title="Visa anteckningar" onPress={() => router.push({ pathname: './notes', params: { dataPath: item.dataPath } })} />
@@ -155,6 +180,31 @@ export default function RecordingsScreen() {
                         />
                     </View>
                 </Pressable>
+            </Modal>
+
+            <Modal visible={isEditingTitle} transparent animationType="slide" onRequestClose={() => setIsEditingTitle(false)}>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.3)' }}>
+                    <View style={{ backgroundColor: 'white', padding: 16, width: '80%', borderRadius: 8 }}>
+                        <Text style={{ fontSize: 16, fontWeight: '600' }}>Ändra title</Text>
+                        <TextInput
+                            value={currentTitle}
+                            onChangeText={setCurrentTitle}
+                            placeholder="Titel"
+                            style={{ borderWidth: 1, borderColor: '#ccc', marginTop: 8, padding: 8, borderRadius: 4 }}
+                        />
+                        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', gap: 8, marginTop: 12 }}>
+                            <Button title="Avbryt" onPress={() => {
+                                setIsEditingTitle(false);
+                                setCurrentTitle(''); }}
+                            />
+                            <Button title="Spara" onPress={async () => {
+                                await saveTitle(currentTitleId, currentTitle);
+                                setIsEditingTitle(false);
+                                setCurrentTitle(''); }}
+                            />
+                        </View>
+                    </View>
+                </View>
             </Modal>
         </SafeAreaView>
     );
